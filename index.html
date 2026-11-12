@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f2ec">
+  <meta name="description" content="A practical, offline interview practice workspace with role-specific questions and transparent answer feedback.">
+  <title>SmartPrep — Interview practice</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell" id="top">
+    <aside class="sidebar">
+      <a class="brand" href="#top" aria-label="SmartPrep home">
+        <span class="brand-mark" aria-hidden="true">s.</span>
+        <span class="brand-copy"><strong>smartprep</strong><small>INTERVIEW PRACTICE</small></span>
+      </a>
+
+      <div class="sidebar-rule"></div>
+      <p class="sidebar-section-label">SET UP A PRACTICE ROUND</p>
+
+      <section class="setup-card" aria-labelledby="setup-title">
+        <div class="card-heading">
+          <div>
+            <span class="eyebrow">01 / YOUR GOAL</span>
+            <h2 id="setup-title">Choose your focus</h2>
+          </div>
+          <span class="step-mark">01</span>
+        </div>
+
+        <label class="field-label" for="roleSelect">Role you're preparing for</label>
+        <div class="select-wrap">
+          <select id="roleSelect">
+            <option value="Backend Java Developer">Backend Java Developer</option>
+            <option value="Frontend Developer">Frontend Developer</option>
+            <option value="Data Analyst">Data Analyst</option>
+            <option value="Full Stack Developer">Full Stack Developer</option>
+            <option value="QA Automation Engineer">QA Automation Engineer</option>
+            <option value="DevOps Engineer">DevOps Engineer</option>
+            <option value="Product Manager">Product Manager</option>
+            <option value="custom">A different role…</option>
+          </select>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg>
+        </div>
+        <div id="customRoleWrap" class="custom-role-wrap" hidden>
+          <label class="field-label" for="customRole">Your role</label>
+          <input id="customRole" type="text" maxlength="60" placeholder="e.g. Android Developer">
+        </div>
+
+        <label class="field-label field-label-spaced" for="experienceSelect">Experience level</label>
+        <div class="select-wrap">
+          <select id="experienceSelect">
+            <option value="Entry level">Entry level · 0–2 years</option>
+            <option value="Mid level" selected>Mid level · 2–5 years</option>
+            <option value="Senior level">Senior level · 5+ years</option>
+          </select>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg>
+        </div>
+
+        <div class="setup-note">
+          <span class="note-icon" aria-hidden="true">i</span>
+          <p>Changing your role gives you a different question set. Your level changes what the reviewer expects to hear.</p>
+        </div>
+      </section>
+
+      <section class="offline-card" aria-labelledby="offline-title">
+        <div class="offline-card-top">
+          <span class="offline-icon" aria-hidden="true">↗</span>
+          <div><p class="eyebrow">MADE TO WORK OFFLINE</p><h2 id="offline-title">Your work stays yours.</h2></div>
+        </div>
+        <p class="offline-description">No account or API key. The review runs in this browser using a visible scoring rubric. Your answer is not sent to a server.</p>
+        <div class="offline-points"><span><b>✓</b> No uploads</span><span><b>✓</b> No sign-in</span></div>
+      </section>
+
+      <div class="sidebar-bottom">
+        <div class="local-status"><span class="status-dot"></span><span>Local session · nothing saved</span></div>
+        <div class="sidebar-version">A SMALL TOOL FOR BETTER INTERVIEWS <span>·</span> 1.1</div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span>Practice room</span><span class="crumb-slash">/</span><strong>Answer review</strong></div>
+        <div class="topbar-right">
+          <span class="mode-pill" id="modePill"><span class="mode-dot"></span> RUNNING LOCALLY</span>
+          <span class="topbar-date">A QUIET PLACE TO PREPARE</span>
+        </div>
+      </header>
+
+      <section class="welcome-row">
+        <div class="welcome-copy-block">
+          <p class="welcome-kicker"><span class="kicker-line"></span> PRACTICE ROUND <span class="welcome-kicker-number">/ 01</span></p>
+          <h1>Good answers start<br><em>with good thinking.</em></h1>
+          <p class="welcome-copy">Pick a question, talk through your approach, and get a little more deliberate with every attempt. Think of this as a practice partner, not a verdict.</p>
+        </div>
+        <aside class="welcome-note" aria-label="Practice reminder">
+          <span class="welcome-note-mark">“</span>
+          <p>Don't rush to the perfect answer. Make your thinking easy to follow.</p>
+          <span class="welcome-note-byline">A NOTE BEFORE YOU START</span>
+        </aside>
+      </section>
+
+      <section class="session-strip" aria-label="Current practice session">
+        <div class="session-stat"><span class="stat-label">ROUND</span><strong id="sessionNumber">Question 01</strong></div>
+        <div class="strip-divider"></div>
+        <div class="session-stat"><span class="stat-label">PRACTISING FOR</span><strong id="focusRole">Backend Java Developer</strong></div>
+        <div class="strip-divider"></div>
+        <div class="session-stat"><span class="stat-label">EXPERIENCE</span><strong id="focusLevel">Mid level</strong></div>
+        <div class="strip-spacer"></div>
+        <div class="session-tip"><span aria-hidden="true">✳</span> Take your time</div>
+      </section>
+
+      <div class="workspace-grid">
+        <div class="practice-column">
+          <section class="panel question-panel" aria-labelledby="question-heading">
+            <div class="panel-topline">
+              <div class="section-heading">
+                <span class="section-number">1</span>
+                <div><p class="eyebrow">THE PROMPT</p><h2 id="question-heading">Your interview question</h2></div>
+              </div>
+              <button class="secondary-button generate-button" id="generateBtn" type="button">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.6 6.7A6.8 6.8 0 1 0 17 12M16.6 3.5v3.7h-3.7"/></svg>
+                Another question
+              </button>
+            </div>
+            <div class="question-meta"><span class="tag tag-purple" id="questionCategory">SYSTEM DESIGN</span><span class="tag tag-muted" id="questionDifficulty">MID LEVEL</span><span class="question-time">About 4 minutes</span></div>
+            <div class="question-copy-wrap">
+              <p class="question-text" id="questionText">Imagine a REST API that handles a sudden 10× increase in traffic. How would you investigate the bottleneck and keep the service reliable?</p>
+              <p class="question-context" id="questionContext">We’re looking for a calm, structured approach — not just a list of tools.</p>
+            </div>
+            <div class="interviewer-hint"><span class="hint-spark" aria-hidden="true">↳</span><div><strong>What the interviewer is listening for</strong><p id="interviewerHint">Walk through how you would measure first, isolate the bottleneck, and choose a fix. Mention trade-offs rather than jumping straight to caching.</p></div></div>
+          </section>
+
+          <section class="panel answer-panel" aria-labelledby="answer-heading">
+            <div class="panel-topline answer-topline">
+              <div class="section-heading">
+                <span class="section-number section-number-green">2</span>
+                <div><p class="eyebrow">YOUR RESPONSE</p><h2 id="answer-heading">How would you answer?</h2></div>
+              </div>
+              <button class="quiet-button" id="clearAnswerBtn" type="button">Clear draft</button>
+            </div>
+            <label class="sr-only" for="answerInput">Type your interview answer</label>
+            <textarea id="answerInput" maxlength="5000" placeholder="I would start by…&#10;&#10;Explain your approach in your own words. A real example helps, but a clear hypothetical is fine too."></textarea>
+            <div class="answer-footer"><span class="writing-tip"><span aria-hidden="true">✎</span> Don't just list tools. Explain why you'd use them.</span><span class="word-count"><strong id="wordCount">0</strong> words <span class="count-separator">·</span> <span id="charCount">0</span>/5000</span></div>
+            <div class="evaluate-row">
+              <div class="evaluate-note"><span class="secure-icon" aria-hidden="true">✓</span> Reviewed on this device. Nothing is uploaded.</div>
+              <button class="primary-button" id="evaluateBtn" type="button" disabled>
+                <span class="button-label">Review my answer</span>
+                <svg class="button-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10 5l5 5-5 5"/></svg>
+                <span class="button-spinner" aria-hidden="true"></span>
+              </button>
+            </div>
+            <p class="inline-message" id="inlineMessage" role="status" aria-live="polite"></p>
+          </section>
+
+          <section class="results-section" id="resultsSection" aria-labelledby="results-heading" hidden>
+            <div class="results-heading-row"><div><p class="eyebrow">YOUR REVIEW</p><h2 id="results-heading">A few things stood out.</h2><p class="results-subtitle" id="reviewSummary">A practice review based on the signals in your answer.</p></div><span class="review-mode" id="reviewMode">OFFLINE RUBRIC</span></div>
+            <div class="score-card panel">
+              <div class="score-main"><div class="score-ring" id="scoreRing"><div><strong id="scoreValue">7.5</strong><span>/ 10</span></div></div><div class="score-copy"><p class="eyebrow">PRACTICE SCORE</p><h3 id="scoreLabel">Good foundation</h3><p id="scoreDescription">You have the core idea. A little more evidence will make it convincing.</p></div></div>
+              <div class="score-scale"><span>Needs work</span><div class="scale-track"><span id="scoreScaleFill"></span></div><span>Well developed</span></div>
+              <div class="rubric-breakdown" aria-label="Score breakdown">
+                <div class="breakdown-item"><div class="breakdown-label"><span>Technical coverage</span><strong id="technicalScore">0/40</strong></div><div class="breakdown-track"><span id="technicalBar"></span></div></div>
+                <div class="breakdown-item"><div class="breakdown-label"><span>Structure & clarity</span><strong id="structureScore">0/25</strong></div><div class="breakdown-track"><span id="structureBar"></span></div></div>
+                <div class="breakdown-item"><div class="breakdown-label"><span>Practical reasoning</span><strong id="practicalScore">0/25</strong></div><div class="breakdown-track"><span id="practicalBar"></span></div></div>
+                <div class="breakdown-item"><div class="breakdown-label"><span>Communication</span><strong id="communicationScore">0/10</strong></div><div class="breakdown-track"><span id="communicationBar"></span></div></div>
+              </div>
+              <p class="score-disclaimer">This is a rule-based practice estimate, not an AI assessment or a hiring decision. It rewards signals in the text, so use the feedback as a checklist.</p>
+            </div>
+            <div class="feedback-grid">
+              <article class="feedback-card strength-card"><div class="feedback-title"><span class="feedback-icon strength-icon">+</span><div><p class="eyebrow">KEEP DOING THIS</p><h3>What worked</h3></div></div><ul id="strengthList"></ul></article>
+              <article class="feedback-card gap-card"><div class="feedback-title"><span class="feedback-icon gap-icon">↗</span><div><p class="eyebrow">NEXT TIME, TRY</p><h3>Room to improve</h3></div></div><ul id="gapList"></ul></article>
+            </div>
+            <article class="model-answer-card">
+              <div class="model-answer-header"><div class="feedback-title"><span class="feedback-icon model-icon">≡</span><div><p class="eyebrow">ONE POSSIBLE APPROACH</p><h3>Example answer</h3></div></div><button class="quiet-button copy-button" id="copyAnswerBtn" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="6" width="9" height="11" rx="1.5"/><path d="M12 4H5.5A1.5 1.5 0 0 0 4 5.5V14"/></svg> Copy example</button></div>
+              <div class="model-answer-text" id="modelAnswerText"></div>
+              <div class="model-answer-footer"><span>Adapt the structure. Don't memorise the wording.</span><button class="text-link-button" id="nextQuestionBtn" type="button">Try another question <span>→</span></button></div>
+            </article>
+          </section>
+        </div>
+
+        <aside class="right-rail">
+          <section class="rail-card prep-card">
+            <div class="rail-card-heading"><span class="eyebrow">A SIMPLE ANSWER STRUCTURE</span><span class="rail-card-number">03 STEPS</span></div>
+            <h3>Give your answer a shape.</h3>
+            <p class="rail-intro">You don't need a memorised script. Just make it easy for someone to follow your thinking.</p>
+            <div class="method-steps">
+              <div class="method-step"><span class="method-index">01</span><div><strong>Set the scene</strong><small>What is the problem or goal?</small></div></div>
+              <div class="method-step"><span class="method-index">02</span><div><strong>Talk through choices</strong><small>What would you do, and why?</small></div></div>
+              <div class="method-step"><span class="method-index">03</span><div><strong>Close the loop</strong><small>How would you test the outcome?</small></div></div>
+            </div>
+          </section>
+
+          <section class="rail-card rubric-card">
+            <div class="rail-card-heading"><span class="eyebrow">HOW THE REVIEW WORKS</span><span class="rail-card-number">100 PTS</span></div>
+            <h3>Four things we look for.</h3>
+            <div class="rubric-row"><span class="rubric-dot rubric-dot-purple"></span><div><strong>Technical coverage</strong><small>Relevant concepts in your answer</small></div><span class="rubric-weight">40</span></div>
+            <div class="rubric-row"><span class="rubric-dot rubric-dot-blue"></span><div><strong>Structure & clarity</strong><small>A clear start and logical flow</small></div><span class="rubric-weight">25</span></div>
+            <div class="rubric-row"><span class="rubric-dot rubric-dot-green"></span><div><strong>Practical reasoning</strong><small>Examples, tests and trade-offs</small></div><span class="rubric-weight">25</span></div>
+            <div class="rubric-row"><span class="rubric-dot rubric-dot-amber"></span><div><strong>Communication</strong><small>Enough detail to make the point</small></div><span class="rubric-weight">10</span></div>
+            <p class="rubric-footnote">The reviewer checks text patterns and keywords. It cannot judge your full technical understanding.</p>
+          </section>
+
+          <div class="rail-quote"><span>“</span><p>You get better at interviews by practising how you think, not by memorising what to say.</p><small>A REMINDER FROM SMARTPREP</small></div>
+        </aside>
+      </div>
+
+      <footer class="page-footer"><span>SMARTPREP <span class="footer-separator">/</span> BUILT FOR PRACTICE, NOT PERFECTION</span><span>Keep learning. Keep showing your work.</span></footer>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
