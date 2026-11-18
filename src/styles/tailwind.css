@@ -1,0 +1,29 @@
+/* ==========================================================================
+   Tailwind CSS Entry & Custom Component Layer
+   Used alongside Tailwind Play CDN (or Tailwind CLI build) + local fallback.
+   ========================================================================== */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+  }
+}
+
+@layer components {
+  .sp-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+  }
+}

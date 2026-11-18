@@ -1,0 +1,131 @@
+/* ==========================================================================
+   Design Tokens — Light & Dark Themes + Larger Readable Typography Scale
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --bg-canvas: #f8fafc;
+  --bg-sidebar: #f1f5f9;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f8fafc;
+  --bg-muted: #eef2f6;
+  --bg-hover: #e9eff6;
+
+  /* Borders */
+  --border-subtle: #e2e8f0;
+  --border-default: #cbd5e1;
+  --border-strong: #94a3b8;
+
+  /* Text Hierarchy (High contrast WCAG AA/AAA) */
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #475569;
+  --text-subtle: #64748b;
+
+  /* Primary Brand Accent — Grounded Cobalt Blue */
+  --accent: #1d4ed8;
+  --accent-hover: #1e40af;
+  --accent-soft: #eff6ff;
+  --accent-border: #bfdbfe;
+  --accent-text: #1e40af;
+
+  /* Semantic Status Colors */
+  --success: #047857;
+  --success-soft: #ecfdf5;
+  --success-border: #a7f3d0;
+
+  --warning: #b45309;
+  --warning-soft: #fffbeb;
+  --warning-border: #fde68a;
+
+  --danger: #b91c1c;
+  --danger-soft: #fef2f2;
+  --danger-border: #fecaca;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Generous, Professional Type Scale (Minimum 14px) */
+  --text-xs: 0.875rem;    /* 14px */
+  --text-sm: 0.9375rem;   /* 15px */
+  --text-base: 1rem;      /* 16px */
+  --text-md: 1.0625rem;   /* 17px */
+  --text-lg: 1.25rem;     /* 20px */
+  --text-xl: 1.5rem;      /* 24px */
+  --text-2xl: 1.875rem;   /* 30px */
+
+  /* Radii & Shadows */
+  --radius-sm: 6px;
+  --radius-md: 9px;
+  --radius-lg: 12px;
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 14px 36px rgba(15, 23, 42, 0.14);
+
+  /* Focus Ring */
+  --focus-ring: 0 0 0 3px rgba(29, 78, 216, 0.22);
+
+  /* Layout Dimensions */
+  --sidebar-width: 284px;
+  --topbar-height: 68px;
+}
+
+/* Dark Theme */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg-canvas: #0f1419;
+  --bg-sidebar: #141b23;
+  --bg-surface: #19222c;
+  --bg-subtle: #1e2834;
+  --bg-muted: #24303e;
+  --bg-hover: #243242;
+
+  --border-subtle: #283546;
+  --border-default: #334155;
+  --border-strong: #475569;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-subtle: #94a3b8;
+
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-soft: rgba(59, 130, 246, 0.15);
+  --accent-border: rgba(59, 130, 246, 0.38);
+  --accent-text: #93c5fd;
+
+  --success: #34d399;
+  --success-soft: rgba(16, 185, 129, 0.14);
+  --success-border: rgba(16, 185, 129, 0.34);
+
+  --warning: #fbbf24;
+  --warning-soft: rgba(245, 158, 11, 0.14);
+  --warning-border: rgba(245, 158, 11, 0.34);
+
+  --danger: #f87171;
+  --danger-soft: rgba(239, 68, 68, 0.14);
+  --danger-border: rgba(239, 68, 68, 0.34);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+  --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.35);
+}
+
+/* User-Controlled Text Scale */
+html[data-font-scale="compact"] {
+  font-size: 93.75%;
+}
+
+html[data-font-scale="standard"] {
+  font-size: 100%;
+}
+
+html[data-font-scale="comfortable"] {
+  font-size: 110%;
+}

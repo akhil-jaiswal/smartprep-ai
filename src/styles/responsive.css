@@ -1,0 +1,122 @@
+/* ==========================================================================
+   Responsive Breakpoints (Laptop, Tablet, Mobile)
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+  .practice-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .practice-rail {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .notes-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 960px) {
+  .app-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 50;
+    width: min(86vw, 310px);
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    background: rgba(15, 23, 42, 0.45);
+  }
+
+  .mobile-menu-btn,
+  .sidebar-close-btn {
+    display: inline-flex;
+  }
+
+  .topbar {
+    padding: 0 18px;
+  }
+
+  .topbar-divider,
+  .topbar-title-group {
+    display: none;
+  }
+
+  .workspace {
+    padding: 20px 18px 44px;
+  }
+
+  .practice-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bank-grid,
+  .feedback-columns,
+  .compare-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar-brand-name {
+    font-size: 1.2rem;
+  }
+
+  .session-toolbar {
+    padding: 12px;
+  }
+
+  .timer-widget {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .question-card,
+  .editor-card,
+  .score-overview-card,
+  .reference-card {
+    padding: 18px;
+  }
+
+  .score-header {
+    flex-direction: column;
+  }
+
+  .rubric-grid,
+  .practice-rail,
+  .kpi-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shortcut-hint {
+    display: none;
+  }
+
+  .editor-actions {
+    justify-content: flex-end;
+  }
+
+  .editor-actions .btn-primary {
+    width: 100%;
+  }
+}

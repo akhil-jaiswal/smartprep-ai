@@ -1,214 +1,698 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light" data-font-scale="standard">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f2ec">
-  <meta name="description" content="A practical, offline interview practice workspace with role-specific questions and transparent answer feedback.">
-  <title>SmartPrep — Interview practice</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
+  <meta name="theme-color" content="#F8FAFC">
+  <meta name="description" content="SmartPrep AI — Interview practice workbench with Tailwind CSS, multi-language support, interview timer, curated question bank, and transparent rubric feedback.">
+  <title>SmartPrep AI — Interview Practice Workbench</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+
+  <!-- Tailwind CSS runtime utilities (works seamlessly alongside local CSS fallback offline) -->
+  <script>
+    window.tailwind = {
+      config: {
+        corePlugins: { preflight: false },
+        darkMode: ['selector', '[data-theme="dark"]'],
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#eff6ff',
+                100: '#dbeafe',
+                200: '#bfdbfe',
+                600: '#2563eb',
+                700: '#1d4ed8',
+                800: '#1e40af'
+              }
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Layered CSS Architecture -->
+  <link rel="stylesheet" href="src/styles/tokens.css">
+  <link rel="stylesheet" href="src/styles/base.css">
+  <link rel="stylesheet" href="src/styles/layout.css">
+  <link rel="stylesheet" href="src/styles/components.css">
+  <link rel="stylesheet" href="src/styles/views.css">
+  <link rel="stylesheet" href="src/styles/responsive.css">
 </head>
 <body>
-  <div class="app-shell" id="top">
-    <aside class="sidebar">
-      <a class="brand" href="#top" aria-label="SmartPrep home">
-        <span class="brand-mark" aria-hidden="true">s.</span>
-        <span class="brand-copy"><strong>smartprep</strong><small>INTERVIEW PRACTICE</small></span>
-      </a>
+  <div class="app-layout" id="appRoot">
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
 
-      <div class="sidebar-rule"></div>
-      <p class="sidebar-section-label">SET UP A PRACTICE ROUND</p>
+    <!-- Primary Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar" aria-label="Workspace navigation">
+      <div class="sidebar-header">
+        <a class="brand" href="#practice" data-nav="practice">
+          <span class="brand-logo" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none">
+              <rect width="32" height="32" rx="7" fill="currentColor"/>
+              <path d="M9 11.5h14M9 16h10M9 20.5h7" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+              <circle cx="22.5" cy="20.5" r="2.2" fill="#93C5FD"/>
+            </svg>
+          </span>
+          <span class="brand-text">
+            <strong data-i18n="brand.name">SmartPrep AI</strong>
+            <span data-i18n="brand.tagline">Interview Workbench</span>
+          </span>
+        </a>
+        <button class="icon-btn sidebar-close-btn" id="closeSidebarBtn" type="button" aria-label="Close navigation menu">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg>
+        </button>
+      </div>
 
-      <section class="setup-card" aria-labelledby="setup-title">
-        <div class="card-heading">
-          <div>
-            <span class="eyebrow">01 / YOUR GOAL</span>
-            <h2 id="setup-title">Choose your focus</h2>
+      <nav class="sidebar-nav" aria-label="Main sections">
+        <button class="nav-item is-active" type="button" data-view="practice" aria-current="page">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 3.5l3 3L7 16H4v-3l9.5-9.5z"/><path d="M11.5 5.5l3 3"/></svg>
+          <span class="nav-label" data-i18n="nav.practice">Practice Room</span>
+        </button>
+        <button class="nav-item" type="button" data-view="bank">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+          <span class="nav-label" data-i18n="nav.bank">Question Bank</span>
+          <span class="nav-badge" id="navBankCount">28</span>
+        </button>
+        <button class="nav-item" type="button" data-view="history">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l2.8 1.6"/></svg>
+          <span class="nav-label" data-i18n="nav.history">Attempt History</span>
+          <span class="nav-badge" id="navHistoryCount">0</span>
+        </button>
+        <button class="nav-item" type="button" data-view="notes">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h8l4 4v10H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M13 3v4h4M7.5 10.5h5M7.5 13.5h5"/></svg>
+          <span class="nav-label" data-i18n="nav.notes">Prep Notes</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-divider"></div>
+
+      <!-- Active Track Configuration -->
+      <section class="sidebar-section" aria-labelledby="track-config-heading">
+        <h2 class="sidebar-heading" id="track-config-heading" data-i18n="nav.activeTrack">Active Track</h2>
+
+        <div class="field-group">
+          <label class="field-label" for="roleSelect" data-i18n="nav.targetRole">Target Role</label>
+          <div class="select-wrapper">
+            <select id="roleSelect" class="form-select">
+              <option value="Backend Java Developer">Backend Java Developer</option>
+              <option value="Frontend Developer">Frontend Developer</option>
+              <option value="Full Stack Developer">Full Stack Developer</option>
+              <option value="Data Analyst">Data Analyst</option>
+              <option value="QA Automation Engineer">QA Automation Engineer</option>
+              <option value="DevOps Engineer">DevOps Engineer</option>
+              <option value="Product Manager">Product Manager</option>
+              <option value="custom">Custom role...</option>
+            </select>
+            <svg class="select-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8l4 4 4-4"/></svg>
           </div>
-          <span class="step-mark">01</span>
         </div>
 
-        <label class="field-label" for="roleSelect">Role you're preparing for</label>
-        <div class="select-wrap">
-          <select id="roleSelect">
-            <option value="Backend Java Developer">Backend Java Developer</option>
-            <option value="Frontend Developer">Frontend Developer</option>
-            <option value="Data Analyst">Data Analyst</option>
-            <option value="Full Stack Developer">Full Stack Developer</option>
-            <option value="QA Automation Engineer">QA Automation Engineer</option>
-            <option value="DevOps Engineer">DevOps Engineer</option>
-            <option value="Product Manager">Product Manager</option>
-            <option value="custom">A different role…</option>
-          </select>
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg>
-        </div>
-        <div id="customRoleWrap" class="custom-role-wrap" hidden>
-          <label class="field-label" for="customRole">Your role</label>
-          <input id="customRole" type="text" maxlength="60" placeholder="e.g. Android Developer">
+        <div class="field-group" id="customRoleGroup" hidden>
+          <label class="field-label" for="customRoleInput" data-i18n="nav.roleTitle">Role Title</label>
+          <input id="customRoleInput" class="form-input" type="text" maxlength="60" placeholder="e.g. Android Engineer">
         </div>
 
-        <label class="field-label field-label-spaced" for="experienceSelect">Experience level</label>
-        <div class="select-wrap">
-          <select id="experienceSelect">
-            <option value="Entry level">Entry level · 0–2 years</option>
-            <option value="Mid level" selected>Mid level · 2–5 years</option>
-            <option value="Senior level">Senior level · 5+ years</option>
-          </select>
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg>
-        </div>
-
-        <div class="setup-note">
-          <span class="note-icon" aria-hidden="true">i</span>
-          <p>Changing your role gives you a different question set. Your level changes what the reviewer expects to hear.</p>
+        <div class="field-group">
+          <label class="field-label" for="levelSelect" data-i18n="nav.experienceLevel">Experience Level</label>
+          <div class="select-wrapper">
+            <select id="levelSelect" class="form-select">
+              <option value="Entry level">Entry level (0–2 yrs)</option>
+              <option value="Mid level" selected>Mid level (2–5 yrs)</option>
+              <option value="Senior level">Senior level (5+ yrs)</option>
+            </select>
+            <svg class="select-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8l4 4 4-4"/></svg>
+          </div>
         </div>
       </section>
 
-      <section class="offline-card" aria-labelledby="offline-title">
-        <div class="offline-card-top">
-          <span class="offline-icon" aria-hidden="true">↗</span>
-          <div><p class="eyebrow">MADE TO WORK OFFLINE</p><h2 id="offline-title">Your work stays yours.</h2></div>
-        </div>
-        <p class="offline-description">No account or API key. The review runs in this browser using a visible scoring rubric. Your answer is not sent to a server.</p>
-        <div class="offline-points"><span><b>✓</b> No uploads</span><span><b>✓</b> No sign-in</span></div>
-      </section>
+      <!-- Local Privacy Footer -->
+      <div class="sidebar-footer">
+        <label class="toggle-row" for="saveHistoryToggle">
+          <input type="checkbox" id="saveHistoryToggle" checked>
+          <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+          <span class="toggle-copy">
+            <strong data-i18n="nav.saveProgress">Save progress locally</strong>
+            <small data-i18n="nav.saveProgressHint">Stored in this browser only. Zero uploads.</small>
+          </span>
+        </label>
 
-      <div class="sidebar-bottom">
-        <div class="local-status"><span class="status-dot"></span><span>Local session · nothing saved</span></div>
-        <div class="sidebar-version">A SMALL TOOL FOR BETTER INTERVIEWS <span>·</span> 1.1</div>
+        <div class="sidebar-meta">
+          <span class="status-indicator"><span class="status-dot"></span> Offline ready</span>
+          <span class="version-tag">v2.1</span>
+        </div>
       </div>
     </aside>
 
-    <main class="main-content">
+    <!-- Main Application Shell -->
+    <div class="main-shell">
       <header class="topbar">
-        <div class="breadcrumb"><span>Practice room</span><span class="crumb-slash">/</span><strong>Answer review</strong></div>
-        <div class="topbar-right">
-          <span class="mode-pill" id="modePill"><span class="mode-dot"></span> RUNNING LOCALLY</span>
-          <span class="topbar-date">A QUIET PLACE TO PREPARE</span>
+        <div class="topbar-left">
+          <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Open navigation menu" aria-expanded="false">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 5.5h14M3 10h14M3 14.5h14"/></svg>
+          </button>
+
+          <a class="topbar-brand-name" href="#practice" data-nav="practice" data-i18n="brand.name">SmartPrep AI</a>
+          <span class="topbar-divider" aria-hidden="true"></span>
+
+          <div class="topbar-title-group">
+            <h1 class="topbar-title" id="topbarViewTitle">Practice Room</h1>
+            <span class="topbar-context" id="topbarContext">Backend Java Developer · Mid level</span>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <!-- Language Switcher -->
+          <div class="select-wrapper topbar-lang-wrap">
+            <select id="topbarLangSelect" class="form-select form-select-sm" aria-label="Switch language">
+              <option value="en">EN</option>
+              <option value="hi">हिन्दी</option>
+              <option value="es">ES</option>
+              <option value="fr">FR</option>
+            </select>
+            <svg class="select-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8l4 4 4-4"/></svg>
+          </div>
+
+          <!-- Readable Font Size Control -->
+          <div class="font-size-control" role="group" aria-label="Text size">
+            <button type="button" class="scale-btn" data-scale="compact" title="Compact text size">A-</button>
+            <button type="button" class="scale-btn is-active" data-scale="standard" title="Standard text size">A</button>
+            <button type="button" class="scale-btn" data-scale="comfortable" title="Large text size">A+</button>
+          </div>
+
+          <!-- Theme Switch -->
+          <button type="button" class="icon-btn" id="themeToggleBtn" title="Toggle light/dark theme" aria-label="Toggle color theme">
+            <svg class="icon-sun" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="3.5"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M15.3 4.7l-1.4 1.4M6.1 13.9l-1.4 1.4"/></svg>
+            <svg class="icon-moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 11.8A6.8 6.8 0 0 1 8.2 3.5a6.8 6.8 0 1 0 8.3 8.3z"/></svg>
+          </button>
+
+          <!-- Shortcuts Dialog Trigger -->
+          <button type="button" class="icon-btn" id="shortcutsBtn" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">
+            <span class="kbd-icon">?</span>
+          </button>
         </div>
       </header>
 
-      <section class="welcome-row">
-        <div class="welcome-copy-block">
-          <p class="welcome-kicker"><span class="kicker-line"></span> PRACTICE ROUND <span class="welcome-kicker-number">/ 01</span></p>
-          <h1>Good answers start<br><em>with good thinking.</em></h1>
-          <p class="welcome-copy">Pick a question, talk through your approach, and get a little more deliberate with every attempt. Think of this as a practice partner, not a verdict.</p>
-        </div>
-        <aside class="welcome-note" aria-label="Practice reminder">
-          <span class="welcome-note-mark">“</span>
-          <p>Don't rush to the perfect answer. Make your thinking easy to follow.</p>
-          <span class="welcome-note-byline">A NOTE BEFORE YOU START</span>
-        </aside>
-      </section>
-
-      <section class="session-strip" aria-label="Current practice session">
-        <div class="session-stat"><span class="stat-label">ROUND</span><strong id="sessionNumber">Question 01</strong></div>
-        <div class="strip-divider"></div>
-        <div class="session-stat"><span class="stat-label">PRACTISING FOR</span><strong id="focusRole">Backend Java Developer</strong></div>
-        <div class="strip-divider"></div>
-        <div class="session-stat"><span class="stat-label">EXPERIENCE</span><strong id="focusLevel">Mid level</strong></div>
-        <div class="strip-spacer"></div>
-        <div class="session-tip"><span aria-hidden="true">✳</span> Take your time</div>
-      </section>
-
-      <div class="workspace-grid">
-        <div class="practice-column">
-          <section class="panel question-panel" aria-labelledby="question-heading">
-            <div class="panel-topline">
-              <div class="section-heading">
-                <span class="section-number">1</span>
-                <div><p class="eyebrow">THE PROMPT</p><h2 id="question-heading">Your interview question</h2></div>
-              </div>
-              <button class="secondary-button generate-button" id="generateBtn" type="button">
-                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.6 6.7A6.8 6.8 0 1 0 17 12M16.6 3.5v3.7h-3.7"/></svg>
-                Another question
+      <main class="workspace" id="workspaceMain">
+        <!-- =========================================================
+             VIEW 1: PRACTICE ROOM
+             ========================================================= -->
+        <section class="view-section is-active" id="view-practice" aria-label="Practice Room">
+          <div class="session-toolbar">
+            <div class="session-info">
+              <span class="prompt-counter" id="promptCounter">Prompt 1 of 4</span>
+              <span class="toolbar-sep" aria-hidden="true">·</span>
+              <button type="button" class="btn btn-ghost btn-sm" id="bookmarkPromptBtn" aria-pressed="false">
+                <svg class="btn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h10a1 1 0 0 1 1 1v12.5l-6-3.5-6 3.5V4.5a1 1 0 0 1 1-1z"/></svg>
+                <span id="bookmarkBtnLabel" data-i18n="practice.savePrompt">Save prompt</span>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" id="nextPromptBtn">
+                <svg class="btn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6.5A6.5 6.5 0 1 0 16.4 12M16 3v3.8h-3.8"/></svg>
+                <span data-i18n="practice.newPrompt">New prompt</span>
               </button>
             </div>
-            <div class="question-meta"><span class="tag tag-purple" id="questionCategory">SYSTEM DESIGN</span><span class="tag tag-muted" id="questionDifficulty">MID LEVEL</span><span class="question-time">About 4 minutes</span></div>
-            <div class="question-copy-wrap">
-              <p class="question-text" id="questionText">Imagine a REST API that handles a sudden 10× increase in traffic. How would you investigate the bottleneck and keep the service reliable?</p>
-              <p class="question-context" id="questionContext">We’re looking for a calm, structured approach — not just a list of tools.</p>
-            </div>
-            <div class="interviewer-hint"><span class="hint-spark" aria-hidden="true">↳</span><div><strong>What the interviewer is listening for</strong><p id="interviewerHint">Walk through how you would measure first, isolate the bottleneck, and choose a fix. Mention trade-offs rather than jumping straight to caching.</p></div></div>
-          </section>
 
-          <section class="panel answer-panel" aria-labelledby="answer-heading">
-            <div class="panel-topline answer-topline">
-              <div class="section-heading">
-                <span class="section-number section-number-green">2</span>
-                <div><p class="eyebrow">YOUR RESPONSE</p><h2 id="answer-heading">How would you answer?</h2></div>
-              </div>
-              <button class="quiet-button" id="clearAnswerBtn" type="button">Clear draft</button>
-            </div>
-            <label class="sr-only" for="answerInput">Type your interview answer</label>
-            <textarea id="answerInput" maxlength="5000" placeholder="I would start by…&#10;&#10;Explain your approach in your own words. A real example helps, but a clear hypothetical is fine too."></textarea>
-            <div class="answer-footer"><span class="writing-tip"><span aria-hidden="true">✎</span> Don't just list tools. Explain why you'd use them.</span><span class="word-count"><strong id="wordCount">0</strong> words <span class="count-separator">·</span> <span id="charCount">0</span>/5000</span></div>
-            <div class="evaluate-row">
-              <div class="evaluate-note"><span class="secure-icon" aria-hidden="true">✓</span> Reviewed on this device. Nothing is uploaded.</div>
-              <button class="primary-button" id="evaluateBtn" type="button" disabled>
-                <span class="button-label">Review my answer</span>
-                <svg class="button-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10 5l5 5-5 5"/></svg>
-                <span class="button-spinner" aria-hidden="true"></span>
+            <div class="timer-widget" aria-label="Interview timer">
+              <select id="timerPresetSelect" class="timer-select" aria-label="Timer duration">
+                <option value="180">3 min</option>
+                <option value="300" selected>5 min</option>
+                <option value="480">8 min</option>
+                <option value="0">Stopwatch</option>
+              </select>
+              <span class="timer-display" id="timerDisplay" aria-live="off">05:00</span>
+              <button type="button" class="btn btn-secondary btn-sm" id="timerToggleBtn" data-i18n="practice.timerStart">Start</button>
+              <button type="button" class="icon-btn icon-btn-sm" id="timerResetBtn" title="Reset timer" aria-label="Reset timer">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10a5.5 5.5 0 1 1 1.3 3.6M4.5 6.5V10h3.5"/></svg>
               </button>
             </div>
-            <p class="inline-message" id="inlineMessage" role="status" aria-live="polite"></p>
-          </section>
+          </div>
 
-          <section class="results-section" id="resultsSection" aria-labelledby="results-heading" hidden>
-            <div class="results-heading-row"><div><p class="eyebrow">YOUR REVIEW</p><h2 id="results-heading">A few things stood out.</h2><p class="results-subtitle" id="reviewSummary">A practice review based on the signals in your answer.</p></div><span class="review-mode" id="reviewMode">OFFLINE RUBRIC</span></div>
-            <div class="score-card panel">
-              <div class="score-main"><div class="score-ring" id="scoreRing"><div><strong id="scoreValue">7.5</strong><span>/ 10</span></div></div><div class="score-copy"><p class="eyebrow">PRACTICE SCORE</p><h3 id="scoreLabel">Good foundation</h3><p id="scoreDescription">You have the core idea. A little more evidence will make it convincing.</p></div></div>
-              <div class="score-scale"><span>Needs work</span><div class="scale-track"><span id="scoreScaleFill"></span></div><span>Well developed</span></div>
-              <div class="rubric-breakdown" aria-label="Score breakdown">
-                <div class="breakdown-item"><div class="breakdown-label"><span>Technical coverage</span><strong id="technicalScore">0/40</strong></div><div class="breakdown-track"><span id="technicalBar"></span></div></div>
-                <div class="breakdown-item"><div class="breakdown-label"><span>Structure & clarity</span><strong id="structureScore">0/25</strong></div><div class="breakdown-track"><span id="structureBar"></span></div></div>
-                <div class="breakdown-item"><div class="breakdown-label"><span>Practical reasoning</span><strong id="practicalScore">0/25</strong></div><div class="breakdown-track"><span id="practicalBar"></span></div></div>
-                <div class="breakdown-item"><div class="breakdown-label"><span>Communication</span><strong id="communicationScore">0/10</strong></div><div class="breakdown-track"><span id="communicationBar"></span></div></div>
+          <div class="practice-grid">
+            <div class="practice-main">
+              <article class="card question-card" aria-labelledby="questionText">
+                <div class="question-badges">
+                  <span class="badge badge-primary" id="questionCategory">System Design</span>
+                  <span class="badge badge-neutral" id="questionDifficulty">Mid level</span>
+                  <span class="badge-meta" id="questionDuration">~5 min target</span>
+                  <span class="badge badge-success" id="questionPreviousBest" hidden></span>
+                </div>
+
+                <h2 class="question-prompt" id="questionText">Loading prompt...</h2>
+                <p class="question-context" id="questionContext"></p>
+
+                <div class="hint-container">
+                  <button type="button" class="hint-toggle" id="toggleHintBtn" aria-expanded="false" aria-controls="hintPanel">
+                    <svg class="hint-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l5 5-5 5"/></svg>
+                    <span data-i18n="practice.showHint">Show interviewer hint</span>
+                    <kbd>Alt+H</kbd>
+                  </button>
+                  <div class="hint-body" id="hintPanel" hidden>
+                    <p id="interviewerHint"></p>
+                  </div>
+                </div>
+              </article>
+
+              <section class="card editor-card" aria-labelledby="editorHeading">
+                <div class="editor-header">
+                  <h3 class="card-title" id="editorHeading" data-i18n="practice.yourResponse">Your Response</h3>
+                  <div class="editor-tools">
+                    <button type="button" class="btn btn-ghost btn-sm" id="insertOutlineBtn" data-i18n="practice.outlineBtn">Outline</button>
+                    <button type="button" class="btn btn-ghost btn-sm" id="insertStarBtn" data-i18n="practice.starBtn">STAR</button>
+                    <button type="button" class="btn btn-ghost btn-sm" id="clearDraftBtn" data-i18n="practice.clearBtn">Clear</button>
+                  </div>
+                </div>
+
+                <label class="sr-only" for="answerInput">Write your interview answer</label>
+                <textarea
+                  id="answerInput"
+                  class="answer-textarea"
+                  maxlength="5000"
+                  rows="9"
+                  data-i18n-placeholder="practice.placeholder"
+                  placeholder="Walk through your answer clearly as you would in an interview:&#10;1. What you clarify or measure first&#10;2. Your chosen approach and key trade-offs&#10;3. How you test, monitor, and verify the outcome"
+                ></textarea>
+
+                <div class="editor-metrics">
+                  <div class="metrics-left">
+                    <span><strong id="wordCount">0</strong> words</span>
+                    <span class="dot-sep" aria-hidden="true">·</span>
+                    <span id="speakingTime">0s spoken</span>
+                    <span class="dot-sep" aria-hidden="true">·</span>
+                    <span id="charCount">0 / 5000 chars</span>
+                  </div>
+                  <span class="autosave-status" id="autosaveStatus" data-i18n="practice.draftSaved">Draft saved locally</span>
+                </div>
+
+                <div class="editor-actions">
+                  <span class="shortcut-hint" data-i18n="practice.shortcutHint">Press Ctrl + Enter to evaluate</span>
+                  <button type="button" class="btn btn-primary btn-lg" id="evaluateBtn" disabled>
+                    <span class="btn-spinner" aria-hidden="true"></span>
+                    <span class="btn-label" data-i18n="practice.evaluateBtn">Evaluate Answer</span>
+                  </button>
+                </div>
+
+                <p class="inline-alert" id="inlineMessage" role="status" aria-live="polite" hidden></p>
+              </section>
+
+              <section class="results-stack" id="resultsSection" aria-labelledby="resultsHeading" hidden>
+                <div class="card score-overview-card">
+                  <div class="score-header">
+                    <div>
+                      <span class="section-label" data-i18n="practice.rubricTitle">Rubric Evaluation</span>
+                      <h3 class="results-heading" id="resultsHeading">Solid foundation</h3>
+                      <p class="results-desc" id="scoreDescription"></p>
+                    </div>
+                    <div class="score-pill" id="scorePill">
+                      <span class="score-number" id="scoreValue">7.5</span>
+                      <span class="score-max">/ 10</span>
+                    </div>
+                  </div>
+
+                  <div class="overall-bar-wrap">
+                    <div class="progress-track progress-track-lg">
+                      <div class="progress-fill" id="overallScoreBar"></div>
+                    </div>
+                    <p class="results-summary" id="reviewSummary"></p>
+                  </div>
+
+                  <div class="rubric-grid" aria-label="Score breakdown by criterion">
+                    <div class="rubric-metric">
+                      <div class="rubric-metric-top">
+                        <span>Technical coverage</span>
+                        <strong id="technicalScore">0 / 40</strong>
+                      </div>
+                      <div class="progress-track"><div class="progress-fill" id="technicalBar"></div></div>
+                    </div>
+                    <div class="rubric-metric">
+                      <div class="rubric-metric-top">
+                        <span>Structure &amp; clarity</span>
+                        <strong id="structureScore">0 / 25</strong>
+                      </div>
+                      <div class="progress-track"><div class="progress-fill" id="structureBar"></div></div>
+                    </div>
+                    <div class="rubric-metric">
+                      <div class="rubric-metric-top">
+                        <span>Practical reasoning</span>
+                        <strong id="practicalScore">0 / 25</strong>
+                      </div>
+                      <div class="progress-track"><div class="progress-fill" id="practicalBar"></div></div>
+                    </div>
+                    <div class="rubric-metric">
+                      <div class="rubric-metric-top">
+                        <span>Depth &amp; pacing</span>
+                        <strong id="communicationScore">0 / 10</strong>
+                      </div>
+                      <div class="progress-track"><div class="progress-fill" id="communicationBar"></div></div>
+                    </div>
+                  </div>
+
+                  <div class="concept-checklist">
+                    <h4 class="sub-heading" data-i18n="practice.conceptChecklist">Concept Checklist</h4>
+                    <div class="concept-pills" id="conceptPills"></div>
+                  </div>
+                </div>
+
+                <div class="feedback-columns">
+                  <article class="card feedback-card feedback-strengths">
+                    <h4 class="feedback-card-title" data-i18n="practice.workedWell">What worked well</h4>
+                    <ul class="feedback-list" id="strengthList"></ul>
+                  </article>
+                  <article class="card feedback-card feedback-gaps">
+                    <h4 class="feedback-card-title" data-i18n="practice.improvements">Suggested improvements</h4>
+                    <ul class="feedback-list" id="gapList"></ul>
+                  </article>
+                </div>
+
+                <article class="card reference-card">
+                  <div class="reference-header">
+                    <div class="segmented-tabs" role="tablist" aria-label="Example view mode">
+                      <button type="button" class="seg-tab is-active" id="tabRefOnly" role="tab" aria-selected="true" data-i18n="practice.refAnswerTab">Reference Answer</button>
+                      <button type="button" class="seg-tab" id="tabRefCompare" role="tab" aria-selected="false" data-i18n="practice.compareTab">Compare Side-by-Side</button>
+                    </div>
+                    <div class="reference-actions">
+                      <button type="button" class="btn btn-ghost btn-sm" id="copyExampleBtn" data-i18n="practice.copyExample">Copy example</button>
+                      <button type="button" class="btn btn-ghost btn-sm" id="exportAttemptBtn" data-i18n="practice.exportMd">Export .md</button>
+                    </div>
+                  </div>
+
+                  <div class="reference-body" id="referenceSingleView">
+                    <div class="prose-block" id="modelAnswerText"></div>
+                  </div>
+
+                  <div class="compare-grid" id="referenceCompareView" hidden>
+                    <div class="compare-pane">
+                      <h5 data-i18n="practice.yourResponse">Your Response</h5>
+                      <div class="prose-block" id="compareUserText"></div>
+                    </div>
+                    <div class="compare-pane">
+                      <h5 data-i18n="practice.refAnswerTab">Reference Answer</h5>
+                      <div class="prose-block" id="compareModelText"></div>
+                    </div>
+                  </div>
+
+                  <div class="reference-footer">
+                    <p class="rubric-note">Local rule-based evaluation checks concept synonyms, structure markers, and practical reasoning. Treat missed pills as a review checklist.</p>
+                    <div class="reference-footer-btns">
+                      <button type="button" class="btn btn-secondary btn-sm" id="reviseDraftBtn" data-i18n="practice.reviseBtn">Revise answer</button>
+                      <button type="button" class="btn btn-primary btn-sm" id="nextAfterReviewBtn" data-i18n="practice.nextPromptBtn">Next prompt</button>
+                    </div>
+                  </div>
+                </article>
+              </section>
+            </div>
+
+            <aside class="practice-rail" aria-label="Session guidance">
+              <section class="card rail-card">
+                <h3 class="rail-title" data-i18n="practice.levelExpectations">Level Expectations</h3>
+                <p class="rail-badge-line"><strong id="railLevelTitle">Mid level</strong> <span id="railLevelYears">2–5 years</span></p>
+                <p class="rail-copy" id="railLevelExpectation"></p>
+                <div class="rail-stat-row">
+                  <span data-i18n="practice.recommendedLength">Recommended length</span>
+                  <strong id="railTargetWords">95–180 words</strong>
+                </div>
+              </section>
+
+              <section class="card rail-card">
+                <h3 class="rail-title" data-i18n="practice.scoringRubric">Scoring Rubric</h3>
+                <p class="rail-copy">100 points scaled to a 10-point practice score.</p>
+                <dl class="rubric-list">
+                  <div class="rubric-list-row">
+                    <dt>Technical coverage<small>Role concepts &amp; synonyms</small></dt>
+                    <dd>40 pts</dd>
+                  </div>
+                  <div class="rubric-list-row">
+                    <dt>Structure &amp; clarity<small>Opening, order, closing</small></dt>
+                    <dd>25 pts</dd>
+                  </div>
+                  <div class="rubric-list-row">
+                    <dt>Practical reasoning<small>Examples, tests, trade-offs</small></dt>
+                    <dd>25 pts</dd>
+                  </div>
+                  <div class="rubric-list-row">
+                    <dt>Depth &amp; pacing<small>Detail matched to level</small></dt>
+                    <dd>10 pts</dd>
+                  </div>
+                </dl>
+              </section>
+
+              <section class="card rail-card">
+                <h3 class="rail-title" data-i18n="practice.trackProgress">Track Progress</h3>
+                <div class="rail-stat-row">
+                  <span data-i18n="practice.promptsPracticed">Prompts practiced</span>
+                  <strong id="railTrackCovered">0 / 4</strong>
+                </div>
+                <div class="rail-stat-row">
+                  <span data-i18n="practice.trackAverage">Track average</span>
+                  <strong id="railTrackAverage">—</strong>
+                </div>
+                <div class="rail-stat-row">
+                  <span data-i18n="practice.savedBookmarks">Saved bookmarks</span>
+                  <strong id="railBookmarkCount">0</strong>
+                </div>
+                <button type="button" class="btn btn-secondary btn-full rail-action-btn" id="railOpenBankBtn" data-i18n="practice.browseBank">Browse Question Bank</button>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             VIEW 2: QUESTION BANK
+             ========================================================= -->
+        <section class="view-section" id="view-bank" aria-label="Question Bank" hidden>
+          <div class="view-header">
+            <div>
+              <h2 class="view-heading" data-i18n="bank.heading">Question Bank</h2>
+              <p class="view-subtitle" data-i18n="bank.subtitle">Browse curated interview prompts, filter by role or seniority, and jump straight into practice.</p>
+            </div>
+            <span class="results-count" id="bankResultsCount">28 prompts</span>
+          </div>
+
+          <div class="filter-bar card">
+            <div class="search-field">
+              <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="5.5"/><path d="M13.5 13.5L17 17"/></svg>
+              <input type="search" id="bankSearchInput" class="form-input search-input" data-i18n-placeholder="bank.searchPlaceholder" placeholder="Search prompts, categories, or concepts (e.g. caching, SQL, SLO)...">
+            </div>
+
+            <div class="filter-controls">
+              <div class="select-wrapper">
+                <select id="bankRoleFilter" class="form-select" aria-label="Filter by role">
+                  <option value="all" data-i18n="bank.allRoles">All roles</option>
+                </select>
+                <svg class="select-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8l4 4 4-4"/></svg>
               </div>
-              <p class="score-disclaimer">This is a rule-based practice estimate, not an AI assessment or a hiring decision. It rewards signals in the text, so use the feedback as a checklist.</p>
+
+              <div class="select-wrapper">
+                <select id="bankDifficultyFilter" class="form-select" aria-label="Filter by difficulty">
+                  <option value="all" data-i18n="bank.allLevels">All levels</option>
+                  <option value="Entry level">Entry level</option>
+                  <option value="Mid level">Mid level</option>
+                  <option value="Senior level">Senior level</option>
+                </select>
+                <svg class="select-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8l4 4 4-4"/></svg>
+              </div>
+
+              <button type="button" class="btn btn-secondary" id="bankBookmarkFilter" aria-pressed="false">
+                <svg class="btn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h10a1 1 0 0 1 1 1v12.5l-6-3.5-6 3.5V4.5a1 1 0 0 1 1-1z"/></svg>
+                <span data-i18n="bank.savedOnly">Saved only</span>
+              </button>
             </div>
-            <div class="feedback-grid">
-              <article class="feedback-card strength-card"><div class="feedback-title"><span class="feedback-icon strength-icon">+</span><div><p class="eyebrow">KEEP DOING THIS</p><h3>What worked</h3></div></div><ul id="strengthList"></ul></article>
-              <article class="feedback-card gap-card"><div class="feedback-title"><span class="feedback-icon gap-icon">↗</span><div><p class="eyebrow">NEXT TIME, TRY</p><h3>Room to improve</h3></div></div><ul id="gapList"></ul></article>
+          </div>
+
+          <div class="bank-grid" id="bankGrid"></div>
+          <div class="empty-state card" id="bankEmptyState" hidden>
+            <h3 data-i18n="bank.emptyTitle">No prompts match those filters</h3>
+            <p data-i18n="bank.emptyDesc">Try clearing your search term or switching back to all roles.</p>
+            <button type="button" class="btn btn-secondary" id="bankResetFiltersBtn" data-i18n="bank.resetFilters">Reset filters</button>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             VIEW 3: ATTEMPT HISTORY
+             ========================================================= -->
+        <section class="view-section" id="view-history" aria-label="Attempt History" hidden>
+          <div class="view-header">
+            <div>
+              <h2 class="view-heading" data-i18n="history.heading">Attempt History</h2>
+              <p class="view-subtitle" data-i18n="history.subtitle">Review previous practice answers, compare scores by role, and export your progress.</p>
             </div>
-            <article class="model-answer-card">
-              <div class="model-answer-header"><div class="feedback-title"><span class="feedback-icon model-icon">≡</span><div><p class="eyebrow">ONE POSSIBLE APPROACH</p><h3>Example answer</h3></div></div><button class="quiet-button copy-button" id="copyAnswerBtn" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="6" width="9" height="11" rx="1.5"/><path d="M12 4H5.5A1.5 1.5 0 0 0 4 5.5V14"/></svg> Copy example</button></div>
-              <div class="model-answer-text" id="modelAnswerText"></div>
-              <div class="model-answer-footer"><span>Adapt the structure. Don't memorise the wording.</span><button class="text-link-button" id="nextQuestionBtn" type="button">Try another question <span>→</span></button></div>
-            </article>
-          </section>
-        </div>
-
-        <aside class="right-rail">
-          <section class="rail-card prep-card">
-            <div class="rail-card-heading"><span class="eyebrow">A SIMPLE ANSWER STRUCTURE</span><span class="rail-card-number">03 STEPS</span></div>
-            <h3>Give your answer a shape.</h3>
-            <p class="rail-intro">You don't need a memorised script. Just make it easy for someone to follow your thinking.</p>
-            <div class="method-steps">
-              <div class="method-step"><span class="method-index">01</span><div><strong>Set the scene</strong><small>What is the problem or goal?</small></div></div>
-              <div class="method-step"><span class="method-index">02</span><div><strong>Talk through choices</strong><small>What would you do, and why?</small></div></div>
-              <div class="method-step"><span class="method-index">03</span><div><strong>Close the loop</strong><small>How would you test the outcome?</small></div></div>
+            <div class="view-header-actions">
+              <button type="button" class="btn btn-secondary btn-sm" id="exportHistoryBtn" data-i18n="history.exportJson">Export JSON</button>
+              <button type="button" class="btn btn-danger-ghost btn-sm" id="clearHistoryBtn" data-i18n="history.clearHistory">Clear history</button>
             </div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="card kpi-card">
+              <span class="kpi-label" data-i18n="history.totalAttempts">Total Attempts</span>
+              <strong class="kpi-value" id="kpiTotalAttempts">0</strong>
+            </div>
+            <div class="card kpi-card">
+              <span class="kpi-label" data-i18n="history.averageScore">Average Score</span>
+              <strong class="kpi-value" id="kpiAvgScore">—</strong>
+            </div>
+            <div class="card kpi-card">
+              <span class="kpi-label" data-i18n="history.highestScore">Highest Score</span>
+              <strong class="kpi-value" id="kpiBestScore">—</strong>
+            </div>
+            <div class="card kpi-card">
+              <span class="kpi-label" data-i18n="history.uniquePrompts">Unique Prompts</span>
+              <strong class="kpi-value" id="kpiUniquePrompts">0 / 28</strong>
+            </div>
+          </div>
+
+          <section class="card role-breakdown-card" id="roleBreakdownCard" hidden>
+            <h3 class="card-title" data-i18n="history.avgByRole">Average Score by Role</h3>
+            <div class="role-bars" id="rolePerformanceBars"></div>
           </section>
 
-          <section class="rail-card rubric-card">
-            <div class="rail-card-heading"><span class="eyebrow">HOW THE REVIEW WORKS</span><span class="rail-card-number">100 PTS</span></div>
-            <h3>Four things we look for.</h3>
-            <div class="rubric-row"><span class="rubric-dot rubric-dot-purple"></span><div><strong>Technical coverage</strong><small>Relevant concepts in your answer</small></div><span class="rubric-weight">40</span></div>
-            <div class="rubric-row"><span class="rubric-dot rubric-dot-blue"></span><div><strong>Structure & clarity</strong><small>A clear start and logical flow</small></div><span class="rubric-weight">25</span></div>
-            <div class="rubric-row"><span class="rubric-dot rubric-dot-green"></span><div><strong>Practical reasoning</strong><small>Examples, tests and trade-offs</small></div><span class="rubric-weight">25</span></div>
-            <div class="rubric-row"><span class="rubric-dot rubric-dot-amber"></span><div><strong>Communication</strong><small>Enough detail to make the point</small></div><span class="rubric-weight">10</span></div>
-            <p class="rubric-footnote">The reviewer checks text patterns and keywords. It cannot judge your full technical understanding.</p>
-          </section>
+          <div class="history-toolbar" id="historyToolbar" hidden>
+            <h3 class="section-subtitle" data-i18n="history.recordedAttempts">Recorded Attempts</h3>
+            <div class="select-wrapper select-compact">
+              <select id="historyRoleFilter" class="form-select" aria-label="Filter history by role">
+                <option value="all" data-i18n="bank.allRoles">All roles</option>
+              </select>
+              <svg class="select-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8l4 4 4-4"/></svg>
+            </div>
+          </div>
 
-          <div class="rail-quote"><span>“</span><p>You get better at interviews by practising how you think, not by memorising what to say.</p><small>A REMINDER FROM SMARTPREP</small></div>
-        </aside>
-      </div>
+          <div class="history-list" id="historyList"></div>
 
-      <footer class="page-footer"><span>SMARTPREP <span class="footer-separator">/</span> BUILT FOR PRACTICE, NOT PERFECTION</span><span>Keep learning. Keep showing your work.</span></footer>
-    </main>
+          <div class="empty-state card" id="historyEmptyState">
+            <h3 data-i18n="history.emptyTitle">No attempts recorded yet</h3>
+            <p data-i18n="history.emptyDesc">Complete and evaluate an answer in the Practice Room to track your progress here.</p>
+            <button type="button" class="btn btn-primary" id="historyStartPracticeBtn" data-i18n="history.goPractice">Go to Practice Room</button>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             VIEW 4: PREP NOTES & FRAMEWORKS
+             ========================================================= -->
+        <section class="view-section" id="view-notes" aria-label="Prep Notes and Frameworks" hidden>
+          <div class="view-header">
+            <div>
+              <h2 class="view-heading" data-i18n="notes.heading">Prep Notes &amp; Frameworks</h2>
+              <p class="view-subtitle" data-i18n="notes.subtitle">Keep your real project stories, metrics, and role scratchpad notes stored privately in this browser.</p>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" id="exportNotesBtn" data-i18n="notes.exportNotes">Export Notes (.md)</button>
+          </div>
+
+          <div class="notes-layout">
+            <section class="card notes-editor-card">
+              <div class="notes-header">
+                <div>
+                  <label class="field-label" for="notesRoleSelect" data-i18n="notes.notebookSection">Notebook Section</label>
+                  <div class="select-wrapper">
+                    <select id="notesRoleSelect" class="form-select">
+                      <option value="General Stories">General Project Stories (STAR)</option>
+                      <option value="Backend Java Developer">Backend Java Developer</option>
+                      <option value="Frontend Developer">Frontend Developer</option>
+                      <option value="Full Stack Developer">Full Stack Developer</option>
+                      <option value="Data Analyst">Data Analyst</option>
+                      <option value="QA Automation Engineer">QA Automation Engineer</option>
+                      <option value="DevOps Engineer">DevOps Engineer</option>
+                      <option value="Product Manager">Product Manager</option>
+                    </select>
+                    <svg class="select-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8l4 4 4-4"/></svg>
+                  </div>
+                </div>
+                <div class="notes-header-right">
+                  <span class="autosave-status" id="notesSavedStatus" data-i18n="practice.draftSaved">Draft saved locally</span>
+                  <button type="button" class="btn btn-ghost btn-sm" id="clearNoteBtn" data-i18n="notes.clearNote">Clear note</button>
+                </div>
+              </div>
+
+              <label class="sr-only" for="notesTextarea">Personal preparation notes</label>
+              <textarea
+                id="notesTextarea"
+                class="notes-textarea"
+                rows="15"
+                data-i18n-placeholder="notes.placeholder"
+                placeholder="Write down real project metrics, production incidents you solved, architecture trade-offs, or questions for your interviewer..."
+              ></textarea>
+            </section>
+
+            <aside class="frameworks-column">
+              <article class="card framework-card">
+                <h3>Technical &amp; System Design Flow</h3>
+                <ol class="framework-steps">
+                  <li><strong>Clarify &amp; measure first:</strong> Define scope, constraints, and baseline telemetry before proposing fixes.</li>
+                  <li><strong>Isolate root cause:</strong> Separate compute, database, network, or product assumptions systematically.</li>
+                  <li><strong>State trade-offs:</strong> Compare at least two viable options and explain why you picked one.</li>
+                  <li><strong>Verify &amp; operate:</strong> Cover testing, rollout safety, monitoring, and rollback criteria.</li>
+                </ol>
+              </article>
+
+              <article class="card framework-card">
+                <h3>STAR Behavioral Checklist</h3>
+                <ol class="framework-steps">
+                  <li><strong>Situation (15%):</strong> Brief context and why the problem mattered to users or the team.</li>
+                  <li><strong>Task (15%):</strong> Your specific ownership and constraints—avoid vague "we" everywhere.</li>
+                  <li><strong>Action (50%):</strong> Concrete decisions you made, obstacles faced, and alternatives rejected.</li>
+                  <li><strong>Result (20%):</strong> Quantified outcome plus one concrete lesson you carried forward.</li>
+                </ol>
+              </article>
+
+              <article class="card framework-card">
+                <h3>High-Signal Questions to Ask</h3>
+                <ul class="framework-bullets">
+                  <li>What does a strong first 90 days look like in this role?</li>
+                  <li>Where is the biggest technical or product bottleneck for the team right now?</li>
+                  <li>How are engineering priorities balanced against reliability and maintenance work?</li>
+                </ul>
+              </article>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
   </div>
 
+  <!-- Keyboard Shortcuts Modal -->
+  <div class="modal-overlay" id="shortcutsModal" role="dialog" aria-modal="true" aria-labelledby="shortcutsModalTitle" hidden>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="shortcutsModalTitle" data-i18n="shortcuts.title">Keyboard Shortcuts</h2>
+        <button type="button" class="icon-btn" id="closeShortcutsBtn" aria-label="Close modal">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg>
+        </button>
+      </div>
+      <div class="shortcut-list">
+        <div class="shortcut-row"><span data-i18n="shortcuts.evaluate">Evaluate current answer</span><span><kbd>Ctrl</kbd> / <kbd>⌘</kbd> + <kbd>Enter</kbd></span></div>
+        <div class="shortcut-row"><span data-i18n="shortcuts.next">Load next prompt</span><span><kbd>Alt</kbd> + <kbd>N</kbd></span></div>
+        <div class="shortcut-row"><span data-i18n="shortcuts.hint">Toggle interviewer hint</span><span><kbd>Alt</kbd> + <kbd>H</kbd></span></div>
+        <div class="shortcut-row"><span data-i18n="shortcuts.timer">Start / pause timer</span><span><kbd>Alt</kbd> + <kbd>T</kbd></span></div>
+        <div class="shortcut-row"><span data-i18n="shortcuts.openDialog">Open keyboard shortcuts</span><span><kbd>?</kbd></span></div>
+        <div class="shortcut-row"><span data-i18n="shortcuts.closeDialog">Close dialog or menu</span><span><kbd>Esc</kbd></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Application Scripts (Ordered by dependency; works on both file:// and HTTP) -->
+  <script src="src/js/config/constants.js" defer></script>
+  <script src="src/locales/en.js" defer></script>
+  <script src="src/locales/hi.js" defer></script>
+  <script src="src/locales/es.js" defer></script>
+  <script src="src/locales/fr.js" defer></script>
+  <script src="src/js/i18n/i18n.js" defer></script>
+  <script src="src/js/data/roles-engineering.js" defer></script>
+  <script src="src/js/data/roles-product-data.js" defer></script>
+  <script src="src/js/data/question-bank.js" defer></script>
+  <script src="src/js/utils/format.js" defer></script>
+  <script src="src/js/utils/dom.js" defer></script>
+  <script src="src/js/services/storage.js" defer></script>
+  <script src="src/js/services/exporter.js" defer></script>
+  <script src="src/js/core/evaluator.js" defer></script>
+  <script src="src/js/core/timer.js" defer></script>
+  <script src="src/js/core/state.js" defer></script>
+  <script src="src/js/views/practice-view.js" defer></script>
+  <script src="src/js/views/bank-view.js" defer></script>
+  <script src="src/js/views/history-view.js" defer></script>
+  <script src="src/js/views/notes-view.js" defer></script>
+  <script src="src/js/main.js" defer></script>
 </body>
 </html>

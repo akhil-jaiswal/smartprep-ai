@@ -1,93 +1,84 @@
-# SmartPrep — Interview practice
+# SmartPrep AI — Interview Practice Workbench
 
-A small, offline-first interview practice app built with **HTML, CSS and vanilla JavaScript**. It gives you role-specific prompts, a place to draft an answer, and transparent feedback based on a local scoring rubric.
+**SmartPrep AI** is a clean, offline-first technical and product interview practice application built with **modular JavaScript, Tailwind CSS, and multi-language support (EN / हिन्दी / ES / FR)**. No sign-up, login, or API key is required — open it and start practising immediately.
 
-> The evaluator is a rule-based practice aid, not a generative AI model and not a substitute for a human interviewer. It looks for question-specific keywords and answer signals such as structure, examples, testing, trade-offs and outcomes.
+## Key Features
 
-## Run it locally
+- **Instant Practice (Zero Login Friction):** Opens directly into the Practice Room with 28+ curated prompts across 7 roles (+ Custom role).
+- **Multi-Language Interface (`src/locales/`):** Instant switching between **English**, **हिन्दी (Hindi)**, **Español (Spanish)**, and **Français (French)** from the top bar.
+- **Readable, Clean UI (`Tailwind CSS` + Layered Design System):** Bold **SmartPrep AI** top header, generous typography (`16px` body, `17px` editor, `24px` prompt headings), live `A-` / `A` / `A+` text-size scaling, and Light/Dark themes.
+- **Practice Room:** Countdown/stopwatch interview timer, collapsible spoiler-free interviewer hints, Outline & STAR quick templates, speaking-time estimator, synonym-aware Concept Checklist pills, and Side-by-Side Reference Answer comparison.
+- **Question Bank, Attempt History & Prep Notes:** Search/filter/bookmark prompts, track KPIs and average score by role, export attempts to Markdown (`.md`) or history to JSON, and save per-role STAR project notes locally.
 
-No installation, package manager, API key or build step is needed.
-
-1. Download or clone this repository.
-2. Keep `index.html`, `style.css` and `app.js` in the same folder.
-3. Open `index.html` in a modern browser.
-4. Choose a role and experience level, generate a prompt, write at least five words, and select **Review my answer**.
-
-The review has a short loading state and is calculated in the browser. Answers are not uploaded or saved by the app. There are no external scripts, fonts, APIs or runtime dependencies.
-
-## What's included
-
-- Seven curated role tracks: Backend Java, Frontend, Data Analyst, Full Stack, QA Automation, DevOps and Product Manager.
-- Entry, mid and senior experience levels.
-- A custom-role fallback prompt set.
-- Question category, context and an interviewer hint.
-- Word and character count, clear draft, and keyboard shortcut (`Ctrl`/`Cmd` + `Enter`) to review.
-- A 10-point practice score, strengths, improvement prompts and a sample answer.
-- Copy sample answer and move to another question.
-- Responsive layout for desktop, tablet and mobile.
-
-## Scoring rubric
-
-The displayed 100-point rubric is converted to a score out of 10:
-
-| Area | Weight | What the local evaluator checks |
-|---|---:|---|
-| Technical coverage | 40 | Relevant keywords attached to the current question |
-| Structure & clarity | 25 | An opening/approach and logical sequencing language |
-| Practical reasoning | 25 | Signals for examples, testing/measurement, trade-offs and outcomes |
-| Communication | 10 | Whether the response contains enough words to explain the idea |
-
-The score is intentionally explainable. It does **not** understand meaning like a language model, verify technical correctness, detect every synonym, or judge spoken delivery. A technically strong answer can receive a lower score if it uses different wording from the rubric. Read the missing-concept feedback as a checklist, not as proof that a concept is absent from your knowledge.
-
-## Project structure
+## Folder Structure
 
 ```text
 smartprep-ai/
-├── index.html   # page structure and content
-├── style.css    # layout, typography, colors and responsive rules
-├── app.js       # question bank, state, local scoring and interactions
-├── README.md    # project documentation
-└── .gitignore
+├── index.html
+├── package.json
+├── tailwind.config.js
+├── .editorconfig
+├── .gitignore
+├── README.md
+├── assets/
+│   └── icons/
+│       └── favicon.svg
+├── docs/
+│   ├── architecture.md
+│   ├── i18n-guide.md
+│   └── scoring-rubric.md
+├── src/
+│   ├── locales/
+│   │   ├── en.js
+│   │   ├── hi.js
+│   │   ├── es.js
+│   │   └── fr.js
+│   ├── styles/
+│   │   ├── tailwind.css
+│   │   ├── tokens.css
+│   │   ├── base.css
+│   │   ├── layout.css
+│   │   ├── components.css
+│   │   ├── views.css
+│   │   └── responsive.css
+│   └── js/
+│       ├── config/
+│       │   └── constants.js
+│       ├── i18n/
+│       │   └── i18n.js
+│       ├── data/
+│       │   ├── roles-engineering.js
+│       │   ├── roles-product-data.js
+│       │   └── question-bank.js
+│       ├── core/
+│       │   ├── evaluator.js
+│       │   ├── timer.js
+│       │   └── state.js
+│       ├── services/
+│       │   ├── storage.js
+│       │   └── exporter.js
+│       ├── utils/
+│       │   ├── dom.js
+│       │   └── format.js
+│       ├── views/
+│       │   ├── practice-view.js
+│       │   ├── bank-view.js
+│       │   ├── history-view.js
+│       │   └── notes-view.js
+│       └── main.js
+└── tests/
+    ├── evaluator.test.js
+    ├── i18n.test.js
+    └── question-bank.test.js
 ```
 
-## Publish with GitHub Pages
+## Quick Start
 
-1. Create a public GitHub repository.
-2. Upload the project files to the repository root.
-3. Open **Settings → Pages**.
-4. Under **Build and deployment**, choose **Deploy from a branch**.
-5. Select the `main` branch and `/ (root)`, then save.
-6. Wait for the Pages deployment to finish and open the URL shown in the Pages settings.
+- **Direct open:** Double-click `index.html` in any modern browser.
+- **Local server:** Run `npm run dev` and open `http://localhost:4173`.
+- **Unit tests:** Run `npm test`.
 
-## Git commands
-
-Replace `YOUR-USERNAME` with your GitHub username. Create an empty repository on GitHub first, then run these commands inside this project folder:
-
-```bash
-git init
-git add .
-git commit -m "Build SmartPrep interview practice app"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/smartprep-ai.git
-git push -u origin main
-```
-
-## Suggested demo flow
-
-1. Choose **Backend Java Developer** and **Mid level**.
-2. Generate a prompt and explain that it comes from a curated question bank.
-3. Enter a short answer first to show that the review asks for more detail.
-4. Enter a fuller answer with relevant concepts, a clear sequence, an example, validation and a trade-off.
-5. Show the score breakdown and explain why the rubric is transparent.
-6. Point out that the app runs locally and does not transmit answer text.
-
-## Possible next improvements
-
-- Add more question packs and synonyms to make keyword matching less brittle.
-- Add a user-editable notes or practice-history feature with explicit local-storage controls.
-- Add unit tests for each scoring rule and a larger set of example answers.
-- If you later want semantic feedback, make it a separate, opt-in feature with a securely hosted backend. This version intentionally has no API integration.
-
-## License
-
-Add a license before accepting contributions or distributing the project beyond your own portfolio.
+## Documentation
+- [Architecture Overview](docs/architecture.md)
+- [Internationalization Guide](docs/i18n-guide.md)
+- [Scoring Rubric](docs/scoring-rubric.md)
